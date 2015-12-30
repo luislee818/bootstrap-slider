@@ -207,7 +207,7 @@
 			linear: {
 				toValue: function(percentage) {
 					var rawValue = percentage/100 * (this.options.max - this.options.min);
-					var shouldAdjustWithBase = true;
+					var value;
 					if (this.options.ticks_positions.length > 0) {
 						var minv, maxv, minp, maxp = 0;
 						for (var i = 1; i < this.options.ticks_positions.length; i++) {
@@ -222,11 +222,11 @@
 						}
 						var partialPercentage = (percentage - minp) / (maxp - minp);
 						rawValue = minv + partialPercentage * (maxv - minv);
-						shouldAdjustWithBase = false;
+						value = rawValue;
+					} else {
+						value = this.options.min + Math.round(rawValue / this.options.step) * this.options.step;
 					}
 
-					var adjustment = shouldAdjustWithBase ? this.options.min : 0;
-					var value = adjustment + Math.round(rawValue / this.options.step) * this.options.step;
 					if (value < this.options.min) {
 						return this.options.min;
 					} else if (value > this.options.max) {
